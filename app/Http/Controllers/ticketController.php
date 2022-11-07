@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\tiket;
 
 class ticketController extends Controller
 {
@@ -13,7 +14,8 @@ class ticketController extends Controller
      */
     public function index()
     {
-        //
+        $tiket = tiket::all();
+        return $tiket;
     }
 
     /**
