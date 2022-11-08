@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\tiket;
+use App\Models\kategori;
 
-class ticketController extends Controller
+class KategoriController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class ticketController extends Controller
      */
     public function index()
     {
-        $tiket = tiket::with('kategori')->get();
-        return $tiket;
+        $kategori = kategori::with('tiket')->get();
+        return $kategori;
     }
 
     /**
@@ -36,11 +36,11 @@ class ticketController extends Controller
      */
     public function store(Request $request)
     {
-        $table = tiket::create([
-            "nama_tiket" => $request->nama_tiket,
-            "deskripsi" => $request->deskripsi,
-            "tanggal" => $request->tanggal,
-            "lokasi" => $request->lokasi,
+        $table = kategori::create([
+            "id_tiket" => $request->id_tiket,
+            "nama_kategori" => $request->nama_kategori,
+            "harga" => $request->harga,
+            "jumlah" => $request->jumlah,
         ]);
 
         return response()->json([
@@ -60,11 +60,11 @@ class ticketController extends Controller
      */
     public function show($id)
     {
-        $tiket = tiket::where('id_tiket', $id)->first();
-        if ($tiket){
+        $kategori = kategori::where('id', $id)->with('tiket')->get();
+        if ($kategori){
             return response()->json([
                 'status' => 200,
-                'data' => $tiket
+                'data' => $kategori
             ], 200);
         } else {
             return response()->json([
@@ -82,7 +82,7 @@ class ticketController extends Controller
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**
@@ -94,25 +94,7 @@ class ticketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tiket = book::where('id_tiket', $id)->first();
-        if($tiket){
-            $tiket->nama_tiket = $request->nama_tiket ? $request->nama_tiket : $tiket->nama_tiket;
-            $tiket->deskripsi = $request->deskripsi ? $request->deskripsi : $tiket->deskripsi;
-            $tiket->tanggal = $request->tanggal ? $request->tanggal : $tiket->tanggal;
-            $tiket->lokasi = $request->lokasi ? $request->lokasi : $tiket->lokasi;
-            $tiket->save();
-            return response()->json([
-                'status' => 200,
-                'message' => "Data tiket berhasil diubah", 
-                'data' => $book
-            ], 200);
-            
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Data dengan id ' . $id . ' tidak ditemukan'
-            ], 404);
-        }
+        //
     }
 
     /**
@@ -123,18 +105,6 @@ class ticketController extends Controller
      */
     public function destroy($id)
     {
-        $tiket = book::where('id_tiket', $id)->first();
-        if($tiket){
-            $tiket->delete();
-            return response()->json([
-                'status' => 200,
-                'message' => "Data tiket berhasil dihapus", 
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Data dengan Id ' . $id . ' tidak ditemukan' 
-            ], 404);
-        }
+        //
     }
 }

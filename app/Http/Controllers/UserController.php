@@ -14,6 +14,12 @@ class UserController extends Controller
         return response()->json(['data' => $user]);
     }
 
+    public function getAllUser()
+    {
+        $user = User::all();
+        return $user;
+    }
+
     public function login(Request $request)
     {
         $input = $request->all();

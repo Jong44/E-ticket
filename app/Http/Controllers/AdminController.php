@@ -17,6 +17,12 @@ class AdminController extends Controller
         return response()->json(['data' => $admin]);
     }
 
+    public function getAllAdmin()
+    {
+        $admin = Admin::all();
+        return $admin;
+    }
+
     public function login(Request $request)
     {
         $input = $request->all();
