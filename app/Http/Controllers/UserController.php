@@ -81,6 +81,51 @@ class UserController extends Controller
 
         return response($response, 201);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $idUser = $user = Auth::id();
+        $user = User::where('id', $idUser)->first();
+        if($user){
+            $user->first_name = $request->first_name ? $request->first_name : $user->first_name;
+            $user->last_name = $request->last_name ? $request->last_name : $user->last_name;
+            $user->username = $request->username ? $request->username : $user->username;
+            $user->email = $request->email ? $request->email : $user->email;
+            $user->no_hp = $request->no_hp ? $request->no_hp : $user->no_hp;
+            $user->alamat = $request->alamat ? $request->alamat : $user->alamat;
+            $user->password = bcrypt($request->first_name) ? bcrypt($request->first_name) : $user->first_name;
+            $user->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "Data user berhasil diubah", 
+                'data' => $user
+            ], 200);
+            
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data dengan id ' . $id . ' tidak ditemukan'
+            ], 404);
+        }
+    }
+
+    public function deleteAccount()
+    {
+        $idUser = $user = Auth::id();
+        $user = User::where('id', $idUser)->first();
+        if($user){
+            $user->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => "Account berhasil dihapus", 
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data dengan Id ' . $id . ' tidak ditemukan' 
+            ], 404);
+        }
+    }
     
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();

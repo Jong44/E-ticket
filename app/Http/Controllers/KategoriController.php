@@ -94,7 +94,25 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $kategori = kategori::where('id', $id)->first();
+        if($kategori){
+            $kategori->id_tiket = $request->id_tiket ? $request->id_tiket : $kategori->id_tiket;
+            $kategori->nama_kategori = $request->nama_kategori ? $request->nama_kategori : $kategori->nama_kategori;
+            $kategori->harga = $request->harga ? $request->harga : $kategori->harga;
+            $kategori->jumlah = $request->jumlah ? $request->jumlah : $kategori->jumlah;
+            $kategori->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "Data kategori berhasil diubah", 
+                'data' => $kategori
+            ], 200);
+            
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data dengan id ' . $id . ' tidak ditemukan'
+            ], 404);
+        }
     }
 
     /**
@@ -105,6 +123,18 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $kategori = kategori::where('id', $id)->first();
+        if($kategori){
+            $kategori->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => "Data kategori berhasil dihapus", 
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data dengan Id ' . $id . ' tidak ditemukan' 
+            ], 404);
+        }
     }
 }

@@ -20,7 +20,6 @@ class CreateAdminsTable extends Migration
             $table->string('username');
             $table->string('email');
             $table->string('no_hp');
-            $table->string('alamat');
             $table->string('password');
             $table->timestamps();
         });

@@ -73,7 +73,18 @@ class PesananController extends Controller
      */
     public function show($id)
     {
-        //
+        $pesanan = tiket::where('id_pesanan', $id)->first();
+        if ($pesanan){
+            return response()->json([
+                'status' => 200,
+                'data' => $pesanan
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'data' => 'Data tiket dengan id ' . $id . ' tidak ditemukan '
+            ], 404);
+        }
     }
 
     /**
