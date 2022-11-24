@@ -14,6 +14,6 @@ class tiket extends Model
 
     public function kategori()
     {
-        return $this->hasMany(kategori::class, 'id_tiket', 'id_tiket');
+        return $this->hasMany(kategori::class, 'id_tiket', 'id');
     }
 }

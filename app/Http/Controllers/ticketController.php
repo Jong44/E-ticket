@@ -60,7 +60,7 @@ class ticketController extends Controller
      */
     public function show($id)
     {
-        $tiket = tiket::where('id_tiket', $id)->first();
+        $tiket = tiket::where('id', $id)->first();
         if ($tiket){
             return response()->json([
                 'status' => 200,
@@ -94,17 +94,17 @@ class ticketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tiket = book::where('id_tiket', $id)->first();
+        $tiket = tiket::where('id', $id)->first();
         if($tiket){
             $tiket->nama_tiket = $request->nama_tiket ? $request->nama_tiket : $tiket->nama_tiket;
             $tiket->deskripsi = $request->deskripsi ? $request->deskripsi : $tiket->deskripsi;
-            $tiket->tanggal = $request->tanggal ? $request->tanggal : $tiket->tanggal;
-            $tiket->lokasi = $request->lokasi ? $request->lokasi : $tiket->lokasi;
+            $tiket->tanggal = $request->tanggal ? $request->tanggal : $kategori->tanggal;
+            $tiket->lokasi = $request->lokasi ? $request->lokasi : $kategori->lokasi;
             $tiket->save();
             return response()->json([
                 'status' => 200,
-                'message' => "Data tiket berhasil diubah", 
-                'data' => $book
+                'message' => "Data kategori berhasil diubah", 
+                'data' => $tiket
             ], 200);
             
         } else {
@@ -123,7 +123,7 @@ class ticketController extends Controller
      */
     public function destroy($id)
     {
-        $tiket = book::where('id_tiket', $id)->first();
+        $tiket = tiket::where('id', $id)->first();
         if($tiket){
             $tiket->delete();
             return response()->json([

@@ -16,7 +16,7 @@ class kategori extends Model
 
     public function tiket()
     {
-        return $this->belongsTo(tiket::class, 'id_tiket', 'id_tiket');
+        return $this->belongsTo(tiket::class, 'id_tiket', 'id');
     }
 
     public function kategori()
