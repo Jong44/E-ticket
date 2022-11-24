@@ -104,7 +104,7 @@ class PesananController extends Controller
         } else {
             return response()->json([
                 'status' => 404,
-                'data' => 'Data tiket dengan id ' . $id . ' tidak ditemukan '
+                'data' => 'Data pesanan tidak ditemukan '
             ], 404);
         }
     }
@@ -151,6 +151,38 @@ class PesananController extends Controller
                 'status' => 200,
                 'message' => "Data pesanan berhasil dihapus", 
             ], 200);
+        }
+        else {
+            return response()->json([
+                'status' => 401,
+                'message' => "Data pesanan tidak ditemukan", 
+            ], 401);
+        }
+    }
+
+    public function getStatusSudahBayar(){
+        $pesanan = pesanan::where('status', 1)->get();
+        if($pesanan){
+            return response()->json([
+                'status' => 201,
+                'data' => $pesanan
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'status' => 401,
+                'message' => "Data pesanan tidak ditemukan", 
+            ], 401);
+        }
+    }
+
+    public function getStatusBelumBayar(){
+        $pesanan = pesanan::where('status', 0)->get();
+        if($pesanan){
+            return response()->json([
+                'status' => 201,
+                'data' => $pesanan
+            ], 201);
         }
         else {
             return response()->json([

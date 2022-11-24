@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pembayaran;
 use App\Models\pesanan;
+use Auth;
 
 class PembayaranController extends Controller
 {
@@ -42,7 +43,7 @@ class PembayaranController extends Controller
             $date = date('Y-m-d'); 
             $table = pembayaran::create([
                 "id_pesanan" => $request->id_pesanan,
-                "tanggal" => $date,
+                "tanggal_pembayaran" => $date,
                 "metode_pembayaran" => $request->metode_pembayaran
             ]);
             $pesanan->status = 1;
@@ -119,5 +120,24 @@ class PembayaranController extends Controller
     public function destroy($id)
     {
         
+    }
+
+    public function getByUser()
+    {
+        $id_user = Auth::id();
+        $id_pesanan = pesanan::where('id_user', $id_user)->first();
+        $id = $id_pesanan->id;
+        $pembayaran = pembayaran::where('id_pesanan', $id)->get();
+        if ($pembayaran){
+            return response()->json([
+                'status' => 200,
+                'data' => $pembayaran
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'data' => 'Data pembayaran tidak ditemukan'
+            ], 404);
+        }
     }
 }

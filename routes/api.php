@@ -41,6 +41,9 @@ Route::middleware(['auth:sanctum','abilities:admin'])->group(function () {
     Route::get('pembayaran/{id}',[PembayaranController::class,'show']);
     Route::delete('pembayaran/{id}',[PembayaranController::class,'destroy']);
 
+    // PESANAN
+    Route::get('pesanan/status/1',[PesananController::class,'getStatusSudahBayar']);
+    Route::get('pesanan/status/0',[PesananController::class,'getStatusBelumBayar']);
 
     //ACCOUNT
     Route::get('users',[UserController::class,'getAllUser']);
@@ -49,6 +52,9 @@ Route::middleware(['auth:sanctum','abilities:admin'])->group(function () {
     Route::delete('admin',[AdminController::class,'deleteAccount'])->middleware(['auth:sanctum','abilities:admin']);
     Route::get('admin',[AdminController::class,'getAdmin'])->middleware(['auth:sanctum','abilities:admin']);
     Route::post('admin/logout',[AdminController::class,'logout'])->middleware(['auth:sanctum','abilities:admin']);
+
+    //FITUR ADMIN
+    Route::post('tiket/count',[FiturController::class,'count']);
 });
 
 
@@ -66,7 +72,7 @@ Route::middleware(['auth:sanctum','abilities:user'])->group(function () {
 
     //Pembayaran
     Route::post('pembayaran',[PembayaranController::class,'store'])->middleware(['auth:sanctum','abilities:user']);
-    Route::get('pembayaran/idUser',[PembayaranController::class,'getPembayaranByIdUser'])->middleware(['auth:sanctum','abilities:user']);
+    Route::get('pembayaranByUser',[PembayaranController::class,'getByUser'])->middleware(['auth:sanctum','abilities:user']);
     
     //ACCOUNT
     Route::put('user',[UserController::class,'updateProfile'])->middleware(['auth:sanctum','abilities:user']);
@@ -86,5 +92,5 @@ Route::get('fitur/tanggal/asc',[FiturController::class,'getByTanggalASC']);
 Route::get('fitur/tanggal/desc',[FiturController::class,'getByTanggalDESC']);
 Route::get('fitur/harga/asc',[FiturController::class,'getByHargaASC']);
 Route::get('fitur/harga/desc',[FiturController::class,'getByHargaDESC']);
-Route::get('fitur/lokasi',[FiturController::class,'getLokasi']);
+Route::post('fitur/lokasi',[FiturController::class,'getLokasi']);
 

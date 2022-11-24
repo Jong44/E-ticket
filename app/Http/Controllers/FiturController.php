@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\tiket;
 use App\Models\kategori;
+use App\Models\pesanan;
 
 class FiturController extends Controller
 {
@@ -22,20 +23,55 @@ class FiturController extends Controller
 
     public function getByHargaASC()
     {
-        $tiket = kategori::with('kategori','tiket')->orderBy('harga','asc')->get();
+        $tiket = tiket::with('kategori')->first();
+        $tiket = $tiket->kategori()->with('tiket')->orderBy('harga','asc')->get();
         return $tiket;
     }
 
     public function getByHargaDESC()
     {
-        $tiket = kategori::with('kategori','tiket')->orderBy('harga','desc')->get();
+        $tiket = tiket::with('kategori')->first();
+        $tiket = $tiket->kategori()->with('tiket')->orderBy('harga','desc')->get();
         return $tiket;
     }
 
     public function getLokasi(Request $request)
     {
-        $tiket = tiket::with('kategori')->query('lokasi','LIKE','%{$request}%')->get();
-        return $tiket;
+        $lokasi = $request->lokasi;
+        $tiket = tiket::where('lokasi', $lokasi)->with('kategori')->get();
+        if($tiket->count() != 0){
+            return response()->json([
+                'status' => 201,
+                'data' => $tiket
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => "Data tiket tidak ditemukan", 
+            ], 401);
+        }
+    }
+
+    public function count(Request $request)
+    {
+        $id_tiket = $request->id_tiket;
+        $nama_tiket = $request->nama_tiket;
+        $tiket = tiket::where('id', $id_tiket)->where('nama_tiket', $nama_tiket)->with('kategori','pesanan')->first();
+        if($tiket){
+            $tiket = $tiket->pesanan->where('status',1);
+            $count = $tiket->count();
+            return response()->json([
+                'status' => 201,
+                'jumlah_count' => $count,
+                'data' => $tiket, 
+            ], 201);;
+        } else{
+            return response()->json([
+                'status' => 401,
+                'message' => "Data tiket tidak ditemukan", 
+            ], 401);
+        }
+        
     }
 
     

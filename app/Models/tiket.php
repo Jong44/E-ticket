@@ -16,4 +16,10 @@ class tiket extends Model
     {
         return $this->hasMany(kategori::class, 'id_tiket', 'id');
     }
+
+    public function pesanan()
+    {
+        return $this->hasMany(pesanan::class, 'id_kategori', 'id');
+    }
 }
+

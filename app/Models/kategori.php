@@ -19,7 +19,7 @@ class kategori extends Model
         return $this->belongsTo(tiket::class, 'id_tiket', 'id');
     }
 
-    public function kategori()
+    public function pesanan()
     {
         return $this->hasMany(pesanan::class, 'id_kategori', 'id');
     }
