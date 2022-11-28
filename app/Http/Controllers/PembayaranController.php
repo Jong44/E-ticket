@@ -59,10 +59,10 @@ class PembayaranController extends Controller
                 );
         } else {
             return response()->json([
-                'success' => 401,
+                'success' => 404,
                 'message' => "Id Pesanan tidak ditemukan", 
             ],
-              401  
+              404  
                 );
         }
         

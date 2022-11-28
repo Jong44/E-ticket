@@ -15,7 +15,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = kategori::with('pesanan')->get();
+        $kategori = kategori::get();
         return $kategori;
     }
 

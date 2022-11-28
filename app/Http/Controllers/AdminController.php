@@ -58,7 +58,6 @@ class AdminController extends Controller
             'last_name' => 'required|string|max:100',
             'username' => 'required|string|max:100',
             'no_hp' => 'required|string|max:100',
-            'alamat' => 'required|string|max:100',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed|min:6'
         ]);
@@ -71,7 +70,6 @@ class AdminController extends Controller
             'username' => $fields['username'],
             'email'=> $fields['email'],
             'no_hp' => $fields['no_hp'],
-            'alamat' => $fields['alamat'],
             'password' => bcrypt($fields['password'])
         ]);
 
@@ -95,7 +93,6 @@ class AdminController extends Controller
             $user->username = $request->username ? $request->username : $user->username;
             $user->email = $request->email ? $request->email : $user->email;
             $user->no_hp = $request->no_hp ? $request->no_hp : $user->no_hp;
-            $user->alamat = $request->alamat ? $request->alamat : $user->alamat;
             $user->password = bcrypt($request->first_name) ? bcrypt($request->first_name) : $user->first_name;
             $user->save();
             return response()->json([

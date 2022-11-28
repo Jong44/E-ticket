@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\pesanan;
 use App\Models\Tukar;
+use Auth;
 
 class PenukaranController extends Controller
 {
@@ -38,13 +39,13 @@ class PenukaranController extends Controller
     public function store(Request $request)
     {
         $kode = $request->kode;
-        $pesanan = pesanan::where('kode', $kode)->with('kategori')->first();
+        $pesanan = pesanan::where('kode_tukar', $kode)->with('kategori')->first();
         if($pesanan){
-            $date = date('Y-m-d'); 
+            $date = date('Y-m-d');
             $pesanan->status_tukar = 1;
             $pesanan->save();
-            $table = pesanan::create([
-                "id_pesanan" => $request->id_pesanan,
+            $table = Tukar::create([
+                "id_pesanan" => $pesanan->id,
                 "tanggal_tukar" => $date
             ]);
             return response()->json([
@@ -68,11 +69,11 @@ class PenukaranController extends Controller
      */
     public function show($id)
     {
-        $penukaran = penukaran::where('id', $id)->first();
-        if ($pembayaran){
+        $penukaran = tukar::where('id', $id)->with('pesanan')->first();
+        if ($penukaran){
             return response()->json([
                 'status' => 200,
-                'data' => $pembayaran
+                'data' => $penukaran
             ], 200);
         } else {
             return response()->json([
