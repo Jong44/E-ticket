@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pembayaran;
 use App\Models\pesanan;
-use Auth;
+use App\Models\Tukar;
 
-class PembayaranController extends Controller
+class PenukaranController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,8 @@ class PembayaranController extends Controller
      */
     public function index()
     {
-        $pembayaran = pembayaran::with('pesanan')->get();
-        return $pembayaran;
+        $tukar = tukar::with('pesanan')->get();
+        return $tukar;
     }
 
     /**
@@ -38,34 +37,27 @@ class PembayaranController extends Controller
      */
     public function store(Request $request)
     {
-        $pesanan = pesanan::where('id', $request->id_pesanan)->first();
+        $kode = $request->kode;
+        $pesanan = pesanan::where('kode', $kode)->with('kategori')->first();
         if($pesanan){
             $date = date('Y-m-d'); 
-            $table = pembayaran::create([
-                "id_pesanan" => $request->id_pesanan,
-                "tanggal_pembayaran" => $date,
-                "metode_pembayaran" => $request->metode_pembayaran
-            ]);
-            $kode = mt_rand(1000,9999); // generate random kode 
-            $pesanan->status = 1;
-            $pesanan->kode_tukar = $kode;
+            $pesanan->status_tukar = 1;
             $pesanan->save();
+            $table = pesanan::create([
+                "id_pesanan" => $request->id_pesanan,
+                "tanggal_tukar" => $date
+            ]);
             return response()->json([
-                'success' => 201,
-                'message' => "Pembayaran berhasil", 
-                'data' => $table
-            ],
-              201  
-                );
+                'status' => 201,
+                'message' => 'Tiket Berhasil Ditukar',
+                'data' => $pesanan
+            ], 201);
         } else {
             return response()->json([
-                'success' => 401,
-                'message' => "Id Pesanan tidak ditemukan", 
-            ],
-              401  
-                );
+                'status' => 404,
+                'message' => 'Data pesanan tidak ditemukan '
+            ], 404);    
         }
-        
     }
 
     /**
@@ -76,7 +68,7 @@ class PembayaranController extends Controller
      */
     public function show($id)
     {
-        $pembayaran = pembayaran::where('id', $id)->first();
+        $penukaran = penukaran::where('id', $id)->first();
         if ($pembayaran){
             return response()->json([
                 'status' => 200,
@@ -121,25 +113,6 @@ class PembayaranController extends Controller
      */
     public function destroy($id)
     {
-        
-    }
-
-    public function getByUser()
-    {
-        $id_user = Auth::id();
-        $id_pesanan = pesanan::where('id_user', $id_user)->first();
-        $id = $id_pesanan->id;
-        $pembayaran = pembayaran::where('id_pesanan', $id)->get();
-        if ($pembayaran){
-            return response()->json([
-                'status' => 200,
-                'data' => $pembayaran
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'data' => 'Data pembayaran tidak ditemukan'
-            ], 404);
-        }
+        //
     }
 }

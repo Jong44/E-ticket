@@ -70,8 +70,24 @@ class FiturController extends Controller
                 'status' => 401,
                 'message' => "Data tiket tidak ditemukan", 
             ], 401);
-        }
-        
+        } 
+    }
+
+    public function getJumlahPenjualan(Request $request)
+    {
+        $id_tiket = $request->id_tiket;
+        $nama_tiket = $request->nama_tiket;
+        $tiket = tiket::where('id', $id_tiket)->where('nama_tiket', $nama_tiket)->with('kategori','pesanan')->first();
+        if($tiket){
+            $tiket = $tiket->pesanan->where('status',1);
+            $count = $tiket->kategori;
+            return $tiket;
+        } else{
+            return response()->json([
+                'status' => 401,
+                'message' => "Data tiket tidak ditemukan", 
+            ], 401);
+        } 
     }
 
     

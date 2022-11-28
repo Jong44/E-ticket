@@ -9,6 +9,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\FiturController;
+use App\Http\Controllers\PenukaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,6 @@ Route::middleware(['auth:sanctum','abilities:admin'])->group(function () {
     Route::get('pesanan/status/0',[PesananController::class,'getStatusBelumBayar']);
 
     //ACCOUNT
-    Route::get('users',[UserController::class,'getAllUser']);
     Route::get('admins',[AdminController::class,'getAllAdmin']);
     Route::put('admin',[AdminController::class,'updateProfile'])->middleware(['auth:sanctum','abilities:admin']);
     Route::delete('admin',[AdminController::class,'deleteAccount'])->middleware(['auth:sanctum','abilities:admin']);
@@ -55,6 +55,12 @@ Route::middleware(['auth:sanctum','abilities:admin'])->group(function () {
 
     //FITUR ADMIN
     Route::post('tiket/count',[FiturController::class,'count']);
+    Route::post('tiket/jumlah',[FiturController::class,'getJumlahPenjualan']);
+
+    //USER
+    Route::put('user/{id}',[UserController::class,'updateProfile']);
+    Route::delete('user/{id}',[UserController::class,'deleteAccount']);
+    Route::get('users',[UserController::class,'getAllUser']);
 });
 
 
@@ -72,13 +78,18 @@ Route::middleware(['auth:sanctum','abilities:user'])->group(function () {
 
     //Pembayaran
     Route::post('pembayaran',[PembayaranController::class,'store'])->middleware(['auth:sanctum','abilities:user']);
-    Route::get('pembayaranByUser',[PembayaranController::class,'getByUser'])->middleware(['auth:sanctum','abilities:user']);
+    Route::get('pembayaran/user',[PembayaranController::class,'getByUser'])->middleware(['auth:sanctum','abilities:user']);
     
     //ACCOUNT
     Route::put('user',[UserController::class,'updateProfile'])->middleware(['auth:sanctum','abilities:user']);
     Route::delete('user',[UserController::class,'deleteAccount'])->middleware(['auth:sanctum','abilities:user']);
     Route::get('user',[UserController::class,'getAdmin'])->middleware(['auth:sanctum','abilities:user']);
     Route::post('user/logout',[UserController::class,'logout'])->middleware(['auth:sanctum','abilities:user']);
+
+    //TUKAR
+    Route::resource('tukar', PenukaranController::class)->except(
+        ['create','edit','update','delete']
+    );
 });
 
 // PUBLIC
@@ -87,10 +98,10 @@ Route::get('tiket/{id}',[ticketController::class,'show']);
 Route::get('kategori',[KategoriController::class,'index']);
 Route::get('kategori/{id}',[KategoriController::class,'show']);
 
+
 // FITUR
 Route::get('fitur/tanggal/asc',[FiturController::class,'getByTanggalASC']);
 Route::get('fitur/tanggal/desc',[FiturController::class,'getByTanggalDESC']);
 Route::get('fitur/harga/asc',[FiturController::class,'getByHargaASC']);
 Route::get('fitur/harga/desc',[FiturController::class,'getByHargaDESC']);
 Route::post('fitur/lokasi',[FiturController::class,'getLokasi']);
-

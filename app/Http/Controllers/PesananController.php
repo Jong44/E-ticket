@@ -59,7 +59,9 @@ class PesananController extends Controller
                 "tanggal" => $date,
                 "jumlah" => $request->jumlah,
                 "total_harga" => $total_harga,
-                "status" => 0
+                "status" => 0,
+                "status_penukaran" => 0,
+                "kode_tukar" => 0
             ]);
             $kategori = kategori::where('id', $request->id_kategori)->first();
             if($kategori){
